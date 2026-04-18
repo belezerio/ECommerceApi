@@ -1,4 +1,5 @@
 using AutoMapper;
+using Azure;
 using ECommerceApi.Models.DTOs;
 using ECommerceApi.Models.Entities;
 using ECommerceApi.Repositories;
@@ -26,5 +27,17 @@ public class ProductService
         await _repo.AddAsync(product);
         await _repo.SaveChangesAsync();
         return _mapper.Map<ProductReadDto>(product);
+    }
+    public async Task<object> GetPagedAsync(int PageNumber , int PageSize, string? category, string? sortBy)
+    {
+        var (products, totalCount) = await _repo.GetPagedAsync(PageNumber, PageSize, category, sortBy);
+        var data = _mapper.Map<IEnumerable<ProductReadDto>>(products);
+        return new
+        {
+            TotalCount = totalCount,
+            PageNumber = PageNumber,
+            PageSize = PageSize,
+            data = data
+        };
     }
 }

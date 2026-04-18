@@ -8,4 +8,5 @@ public interface IProductRepository
     Task<Product?> GetByIdAsync(int id);
     Task AddAsync(Product product);
     Task SaveChangesAsync();
+    Task <(IEnumerable<Product>,int)> GetPagedAsync(int pageNumber, int pageSize, string? category , string? sortBy);
 }
